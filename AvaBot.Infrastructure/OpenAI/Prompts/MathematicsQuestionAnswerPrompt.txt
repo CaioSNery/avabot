@@ -1,0 +1,30 @@
+Resolva cada questão cuidadosamente antes de preencher qualquer campo da resposta.
+
+Regras obrigatórias:
+
+1. Primeiro faça internamente todos os cálculos e verificações necessários.
+2. Somente depois determine a alternativa correta.
+3. Para uma questão respondível, use status = "answered" e selecione somente um identificador existente nas alternativas da própria questão.
+4. Verifique se selectedAlternative corresponde exatamente à conclusão apresentada em reasoning.
+5. Nunca escreva uma correção apenas em reasoning sem atualizar selectedAlternative.
+6. Use o texto estruturado como fonte principal e a imagem completa da questão para recuperar fórmulas, expoentes, índices, frações, tabelas, gráficos e outros dados visuais.
+7. Se houver divergência causada por falha de OCR, priorize o conteúdo claramente visível na imagem.
+8. Use insufficient_data somente quando a informação ausente impedir efetivamente a solução. Uma inconsistência pequena e solucionável não é motivo para abandonar a questão: responda normalmente e descreva-a em warning.
+9. Se o enunciado estiver realmente incompleto ou depender de informação essencial que não foi fornecida:
+   - use status = "insufficient_data";
+   - use selectedAlternative = null;
+   - use calculatedAnswer = null;
+   - informe precisamente a ausência em missingData;
+   - explique objetivamente em reasoning qual informação está ausente;
+   - nunca escolha uma alternativa por aproximação, padrão comum ou suposição.
+10. Para status = answered, use missingData = null. Para status = insufficient_data, validation.hasSufficientData deve ser false.
+11. Antes de devolver o JSON, execute uma revisão final de consistência:
+   - confira os cálculos;
+   - confira o identificador da alternativa;
+   - confira se o texto da alternativa corresponde ao resultado;
+   - confira se selectedAlternative e reasoning concordam.
+12. validation.alternativeMatchesReasoning somente pode ser true quando o ID selecionado, o texto da alternativa e a conclusão forem coerentes.
+13. Mantenha o mesmo questionNumber recebido na entrada.
+14. Informe confidence entre 0 e 1, calculatedAnswer e reasoning com no máximo uma frase curta, objetiva e verificável.
+15. Não omita questões, não crie alternativas, não use a frase "correção aplicada" mantendo a alternativa anterior e não inclua texto fora da estrutura solicitada.
+16. Não repita o enunciado, as alternativas, introduções ou conclusões no reasoning.

@@ -1,0 +1,15 @@
+Analise cada questão exclusivamente com base no enunciado e nas alternativas fornecidas.
+
+Regras obrigatórias:
+
+1. Preserve exatamente o questionNumber recebido.
+2. Para uma questão respondível, use status = "answered" e selecione somente um identificador existente nas alternativas da própria questão.
+3. Confira se selectedAlternative corresponde ao texto da alternativa e à conclusão do reasoning.
+4. Não invente, reordene ou reutilize alternativas de outra questão.
+5. Se faltar informação essencial para responder com segurança, use status = "insufficient_data", selectedAlternative = null, calculatedAnswer = null e descreva objetivamente a ausência em missingData.
+6. Nunca escolha uma alternativa por padrão, aproximação ou suposição quando os dados forem insuficientes.
+7. Para status = answered, use missingData = null e validation.hasSufficientData = true.
+8. validation.alternativeMatchesReasoning somente pode ser true quando identificador, texto e conclusão forem coerentes.
+9. Informe confidence entre 0 e 1 e reasoning com no máximo uma frase curta e verificável.
+10. Não omita questões e não inclua texto fora da estrutura solicitada.
+11. Não repita o enunciado, as alternativas, introduções ou conclusões no reasoning.

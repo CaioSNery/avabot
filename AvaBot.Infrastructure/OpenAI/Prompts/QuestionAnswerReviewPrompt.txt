@@ -1,0 +1,10 @@
+Revise a resposta estruturada usando somente a questão original e suas alternativas.
+
+A resposta anterior está em responseToReview e é apenas um rascunho.
+
+1. Retorne exatamente uma resposta para cada questão recebida.
+2. Preserve o questionNumber.
+3. Garanta que selectedAlternative exista na própria questão e corresponda ao texto e à conclusão do reasoning.
+4. Não reutilize resposta de outra questão e não mantenha uma alternativa inconsistente.
+5. Se faltarem dados essenciais, use status = "insufficient_data", selectedAlternative = null e descreva missingData.
+6. Não inclua texto fora do JSON definido pelo schema.

@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaBot.Console", "AvaBot.Console\AvaBot.Console.csproj", "{D7D8DB46-C94D-4F4A-BC2E-C85DDBA6C841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaBot.Application", "AvaBot.Application\AvaBot.Application.csproj", "{2282F184-D2AA-4685-9F7F-B76EEE26E920}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaBot.Domain", "AvaBot.Domain\AvaBot.Domain.csproj", "{5936353B-51BC-4083-8D0B-130F4F505CBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaBot.Infrastructure", "AvaBot.Infrastructure\AvaBot.Infrastructure.csproj", "{202E1024-1D27-46C0-BD8A-22D4AED9B717}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaBot.Shared", "AvaBot.Shared\AvaBot.Shared.csproj", "{F026033C-FD61-4073-85F3-45653D913B9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaBot.Tests", "AvaBot.Tests\AvaBot.Tests.csproj", "{A313B524-DF21-4617-AD9E-8D3AC560386B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7D8DB46-C94D-4F4A-BC2E-C85DDBA6C841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D8DB46-C94D-4F4A-BC2E-C85DDBA6C841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D8DB46-C94D-4F4A-BC2E-C85DDBA6C841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D8DB46-C94D-4F4A-BC2E-C85DDBA6C841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2282F184-D2AA-4685-9F7F-B76EEE26E920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2282F184-D2AA-4685-9F7F-B76EEE26E920}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2282F184-D2AA-4685-9F7F-B76EEE26E920}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2282F184-D2AA-4685-9F7F-B76EEE26E920}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5936353B-51BC-4083-8D0B-130F4F505CBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5936353B-51BC-4083-8D0B-130F4F505CBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5936353B-51BC-4083-8D0B-130F4F505CBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5936353B-51BC-4083-8D0B-130F4F505CBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{202E1024-1D27-46C0-BD8A-22D4AED9B717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202E1024-1D27-46C0-BD8A-22D4AED9B717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202E1024-1D27-46C0-BD8A-22D4AED9B717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202E1024-1D27-46C0-BD8A-22D4AED9B717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F026033C-FD61-4073-85F3-45653D913B9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F026033C-FD61-4073-85F3-45653D913B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F026033C-FD61-4073-85F3-45653D913B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F026033C-FD61-4073-85F3-45653D913B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A313B524-DF21-4617-AD9E-8D3AC560386B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A313B524-DF21-4617-AD9E-8D3AC560386B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A313B524-DF21-4617-AD9E-8D3AC560386B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A313B524-DF21-4617-AD9E-8D3AC560386B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

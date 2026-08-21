@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\AvaBot.Application\AvaBot.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="Microsoft.Playwright" />
+    <PackageReference Include="Polly" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="OpenAI\Prompts\*.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

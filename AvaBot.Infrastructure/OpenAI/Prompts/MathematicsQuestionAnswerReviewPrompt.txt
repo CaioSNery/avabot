@@ -1,0 +1,13 @@
+Revise uma resposta estruturada que falhou na validação de coerência.
+
+Use novamente a questão original, suas alternativas, fórmulas, tabelas e imagem completa.
+A resposta anterior está no campo responseToReview e é apenas um rascunho a ser verificado.
+
+Regras obrigatórias:
+
+1. Refaça o cálculo antes de escolher a alternativa.
+2. Retorne exatamente uma resposta revisada para cada questão recebida.
+3. Garanta que selectedAlternative corresponda ao resultado, ao texto da alternativa e à conclusão do reasoning.
+4. Não copie uma letra inconsistente da resposta anterior.
+5. Use insufficient_data apenas quando uma informação essencial realmente estiver ausente; nesse caso use selectedAlternative = null e descreva missingData.
+6. Não inclua texto fora do JSON definido pelo schema.
