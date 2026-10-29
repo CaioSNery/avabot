@@ -1,4 +1,5 @@
 using AvaBot.Domain.Models;
+using AvaBot.Domain.Exceptions;
 using AvaBot.Infrastructure.Extraction;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -8,6 +9,27 @@ namespace AvaBot.Tests;
 
 public sealed class QuizAutoStartTests
 {
+    [Fact]
+    public async Task WaitForQuestionsAsync_UnavailableQuizStopsAfterTenSeconds()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(
+            new BrowserTypeLaunchOptions { Headless = true });
+        var page = await browser.NewPageAsync();
+        await page.SetContentAsync(
+            "<div>Ainda não foi inserida nenhuma pergunta</div><button>Voltar ao curso</button>");
+        var flow = new QuestionConsoleFlow(
+            null!, null!, null!, Options.Create(new QuestionExtractionOptions()),
+            NullLogger<QuestionConsoleFlow>.Instance);
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+        await Assert.ThrowsAsync<QuizUnavailableException>(() =>
+            flow.WaitForQuestionsAsync(page, CancellationToken.None));
+
+        Assert.InRange(stopwatch.Elapsed.TotalSeconds, 9, 20);
+        Assert.Equal(0, await page.Locator(".que").CountAsync());
+    }
+
     [Fact]
     public async Task WaitForQuestionsAsync_StartsAndConfirmsQuizOnlyOnce()
     {

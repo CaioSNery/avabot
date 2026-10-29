@@ -1,3 +1,4 @@
+using AvaBot.Domain.Exceptions;
 using AvaBot.Domain.Interfaces;
 using AvaBot.Domain.Models;
 using AvaBot.Shared;
@@ -185,10 +186,22 @@ public sealed class BotRunner(
                 discipline,
                 cancellationToken);
 
-            var disciplineResult = await ProcessDisciplineAsync(
-                avaPage,
-                discipline,
-                cancellationToken);
+            DisciplineProcessingResult disciplineResult;
+            try
+            {
+                disciplineResult = await ProcessDisciplineAsync(
+                    avaPage,
+                    discipline,
+                    cancellationToken);
+            }
+            catch (ReturnToDisciplinesRequestedException)
+            {
+                logger.LogWarning(
+                    "Retorno autorizado pelo usuário: {DisciplineName} possui questionário indisponível e continuará pendente",
+                    discipline.Nome);
+                await ReturnToDisciplinesAsync(avaPage, disciplinesPageUrl, cancellationToken);
+                continue;
+            }
             processedDisciplineCount++;
             processedUnitCount += disciplineResult.ProcessedUnits;
             processedSectionCount += disciplineResult.ProcessedSections;
@@ -615,11 +628,32 @@ public sealed class BotRunner(
                 "Disciplina: {DisciplineName}; modo visual: {VisualMode}",
                 disciplineName,
                 visualMode ? "SIM" : "NÃO");
-            await questionConsoleFlow.ExecuteAsync(
-                avaPage,
-                disciplineName,
-                visualMode,
-                cancellationToken);
+            while (true)
+            {
+                try
+                {
+                    await questionConsoleFlow.ExecuteAsync(
+                        avaPage,
+                        disciplineName,
+                        visualMode,
+                        cancellationToken);
+                    break;
+                }
+                catch (QuizUnavailableException exception)
+                {
+                    logger.LogWarning(
+                        "Questionário indisponível em {CurrentUrl}: {Reason}. Aguardando decisão do usuário",
+                        avaPage.Url,
+                        exception.Message);
+                    if (await QuizUnavailablePrompt.ConfirmReturnAsync(
+                            Console.In, Console.Out, cancellationToken))
+                    {
+                        throw new ReturnToDisciplinesRequestedException();
+                    }
+
+                    logger.LogInformation("Usuário optou por permanecer; verificando novamente a abertura do questionário");
+                }
+            }
             logger.LogInformation("JSON das questões exposto no console");
 
             logger.LogInformation(
@@ -771,8 +805,8 @@ public sealed class BotRunner(
                 "Retornando à seção para procurar a próxima atividade pendente");
             await avaPage.NavigateAsync(sectionUrl, cancellationToken);
             await avaPage.WaitForDomContentLoadedAsync(cancellationToken);
-            await avaPage.WaitForNetworkIdleAsync(cancellationToken);
             await avaPage.WaitForVisibleAsync("#ct-cards-list", cancellationToken);
+            logger.LogInformation("Retorno à seção confirmado pelo DOM e pelos cards: {SectionUrl}", avaPage.Url);
         }
     }
 
@@ -828,6 +862,8 @@ public sealed class BotRunner(
         int ProcessedUnits,
         int ProcessedSections,
         int ActivityCount);
+
+    private sealed class ReturnToDisciplinesRequestedException : Exception;
 
     private sealed record SectionActivityProcessingResult(
         int ActivityCount,

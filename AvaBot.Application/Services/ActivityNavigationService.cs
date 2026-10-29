@@ -301,12 +301,17 @@ public sealed class ActivityNavigationService(
             logger.LogInformation("NetworkIdle concluído {Stage}", stage);
         }
         catch (TimeoutException exception)
-            when (activity.Tipo == ActivityType.MaterialInformativo)
+            when (!cancellationToken.IsCancellationRequested &&
+                  activity.Tipo is (ActivityType.WebAula or
+                      ActivityType.VideoAulaResumo or
+                      ActivityType.ConteudoProfessor or
+                      ActivityType.MaterialInformativo or
+                      ActivityType.AulaPratica))
         {
             logger.LogWarning(
                 exception,
-                "NetworkIdle não foi alcançado {Stage} do material informativo {ActivityName}; " +
-                "a navegação já foi confirmada pela mudança de URL e o fluxo continuará",
+                "NetworkIdle não foi alcançado {Stage} do conteúdo {ActivityName}; " +
+                "DOMContentLoaded foi concluído; o fluxo continuará com a confirmação da página",
                 stage,
                 activity.Nome);
         }

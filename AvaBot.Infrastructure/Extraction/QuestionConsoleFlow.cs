@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using AvaBot.Domain.Exceptions;
 using AvaBot.Domain.Interfaces;
 using AvaBot.Domain.Models;
 using AvaBot.Infrastructure.Browser;
@@ -95,6 +96,29 @@ public sealed class QuestionConsoleFlow(
 
         if (!page.Url.Contains(AttemptUrlFragment, StringComparison.OrdinalIgnoreCase))
         {
+            logger.LogInformation("Aguardando botão de abertura ou questões por até 10 segundos");
+            try
+            {
+                await page.Locator($"{StartQuizSelector}, {_options.QuestionSelector}")
+                    .First.WaitForAsync(new LocatorWaitForOptions
+                    {
+                        State = WaitForSelectorState.Visible,
+                        Timeout = 10000
+                    }).WaitAsync(cancellationToken);
+            }
+            catch (TimeoutException exception)
+            {
+                throw new QuizUnavailableException(
+                    "Nenhum botão de abertura ou questão apareceu em 10 segundos.",
+                    exception);
+            }
+
+            questions = await SelectQuestionContainersAsync(page, cancellationToken);
+            if (await questions.CountAsync() > 0 && await questions.First.IsVisibleAsync())
+            {
+                return;
+            }
+
             var startButton = await FindFirstInteractableAsync(
                 page.Locator(StartQuizSelector),
                 cancellationToken);
@@ -108,8 +132,9 @@ public sealed class QuestionConsoleFlow(
             }
             else
             {
-                logger.LogWarning(
-                    "Nenhum botão interagível para abrir o questionário foi encontrado; aguardando renderização das questões");
+                throw new QuizUnavailableException(
+                    "O botão de abertura do questionário não está disponível para interação.",
+                    new InvalidOperationException("Botão ausente ou desabilitado."));
             }
         }
         else

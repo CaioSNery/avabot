@@ -10,6 +10,40 @@ namespace AvaBot.Tests;
 public sealed class OpenAiClientTests
 {
     [Fact]
+    public async Task ExecuteAsync_LunaUsesResponsesWithLowReasoningAndStrictJsonSchema()
+    {
+        var handler = new MockHttpMessageHandler();
+        handler.EnqueueJson(HttpStatusCode.OK,
+            """
+            {"output":[{"content":[{"type":"output_text","text":"{\"results\":[]}"}]}],"usage":{}}
+            """);
+        using var httpClient = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://api.openai.com/v1/")
+        };
+        var client = new OpenAiClient(httpClient,
+            Options.Create(new OpenAiOptions
+            {
+                ApiKey = "test-key",
+                PrimaryModel = "gpt-6-luna",
+                FallbackModel = "gpt-5",
+                ReasoningEffort = "low"
+            }), NullLogger<OpenAiClient>.Instance);
+
+        await client.ExecuteAsync("gpt-6-luna", "Prompt de teste",
+            new InferenceRequestDto([TestQuestionFactory.Create(1)]));
+
+        using var payload = JsonDocument.Parse(handler.LastRequestBody!);
+        var root = payload.RootElement;
+        Assert.Equal("gpt-6-luna", root.GetProperty("model").GetString());
+        Assert.Equal("low", root.GetProperty("reasoning").GetProperty("effort").GetString());
+        Assert.Equal("json_schema", root.GetProperty("text").GetProperty("format").GetProperty("type").GetString());
+        Assert.True(root.GetProperty("text").GetProperty("format").GetProperty("strict").GetBoolean());
+        Assert.False(root.TryGetProperty("temperature", out _));
+        Assert.Equal(1, handler.RequestCount);
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ParsesStructuredResponseWithoutInternet()
     {
         const string responseJson =

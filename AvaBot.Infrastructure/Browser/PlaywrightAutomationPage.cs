@@ -145,13 +145,27 @@ internal sealed class PlaywrightAutomationPage(
         {
             logger.LogInformation("Navegando para {Url}", url);
 
+            var isCoursePage = Uri.TryCreate(url, UriKind.Absolute, out var targetUri) &&
+                targetUri.AbsolutePath.Equals("/course/view.php", StringComparison.OrdinalIgnoreCase);
+
             await page.GotoAsync(url, new PageGotoOptions
             {
-                WaitUntil = WaitUntilState.Load
+                WaitUntil = isCoursePage ? WaitUntilState.DOMContentLoaded : WaitUntilState.Load
             }).WaitAsync(cancellationToken);
 
-            await page.WaitForLoadStateAsync(LoadState.NetworkIdle)
-                .WaitAsync(cancellationToken);
+            try
+            {
+                await page.WaitForLoadStateAsync(LoadState.NetworkIdle,
+                    isCoursePage ? new PageWaitForLoadStateOptions { Timeout = 5000 } : null)
+                    .WaitAsync(cancellationToken);
+            }
+            catch (TimeoutException exception) when (isCoursePage && !cancellationToken.IsCancellationRequested)
+            {
+                logger.LogWarning(exception,
+                    "NetworkIdle não foi alcançado em 5 segundos na página da disciplina {CurrentUrl}; " +
+                    "DOMContentLoaded concluído; a confirmação dos elementos será feita pelo serviço responsável",
+                    page.Url);
+            }
 
             logger.LogInformation("Página carregada: {CurrentUrl}", page.Url);
         }
